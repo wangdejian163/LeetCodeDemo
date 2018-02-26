@@ -31,8 +31,8 @@ public class TwoSum {
         Map<Integer, Integer> map = new HashMap<>();
         // 实现nums[i] + nums[j] = target
         for (int i = 0; i< nums.length; i++) {
+            // 把数组值和对应下标以key,value形式存放到map中.
             Integer index = map.get(target - nums[i]);
-            // nums数组中2个元素相加等于target就返回索引
             if (null == index) {
                 map.put(nums[i], i);
             } else {
