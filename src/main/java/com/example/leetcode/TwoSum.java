@@ -1,7 +1,6 @@
 package com.example.leetcode;
 
 /**
- * <p></p>
  * <p>
  *     two sum
  * </p>
