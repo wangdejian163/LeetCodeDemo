@@ -2,7 +2,8 @@ package com.example.leetcode;
 
 /**
  * <p>
- *     String To Integer：题目太长了，光看懂题意就花了好长时间。题目难度为Medium，不太好考虑全面。看了别人写的自己想了好久才写完
+ *     String To Integer：题目太长了，光看懂题意就花了好长时间。
+ *     题目难度为Medium，不太好考虑全面。看了别人写的自己想了好久才写完
  * </p>
  *
  * @author wangdejian
