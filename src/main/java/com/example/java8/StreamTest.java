@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -32,7 +33,19 @@ public class StreamTest {
         // 2.通过Stream的静态方法:例如of()，iterate()
         Stream<List<String>> stream2 = Stream.of(list);
         Stream<Integer> stream3 = Stream.iterate(0, (x) -> x + 2);
+
         Stream<Integer> stream4 = Stream.generate(() -> (int) Math.random());
+        //接上面代码对比下java8和之前写法对比。1.普通表现形式
+        Stream.generate(new Supplier<Double>() {
+            @Override
+            public Double get() {
+                return Math.random();
+            }
+        });
+        //2.lambda表达式的表现形式
+        Stream.generate(() -> Math.random());
+        //3.方法引用的表现形式
+        Stream.generate(Math::random);
 
         // 3. 数组转为stream
         String[] str = new String[]{"a", "b", "c"};
@@ -93,14 +106,43 @@ public class StreamTest {
                 .limit(3)
                 .distinct()
                 .forEach(System.out::println);
-
         //输出结果:
         //Student{name='ten', age=99, stuNum='00018', address='朝阳'}
         //Student{name='ten', age=9, stuNum='00018', address='朝阳'}
     }
 
+    /**
+     *
+     * 映射：map和flatMap
+     *
+     * map() --> 通过Function对元素执行一对一的转换。
+     * map是对流对象中间的操作，通过给定的方法，将流中的每一个元素映射成一个新的元素。
+     */
+    @Test
+    public void optionStreamMap() {
+        List<String> list = Arrays.asList("aaa", "ccc", "bbb");
+        list.stream().map(String::toUpperCase).sorted()
+                .forEach(System.out::println);
 
+        studentList.stream().map(Student::getAge).forEach(System.out::println);
+        Stream<String> sorted = list.stream().map((x) -> x.toUpperCase()).sorted();
 
+    }
+
+    /**
+     * flatMap和map类似，不同的是flatMap把流中的每个值转换成另外一个流，然后把所有的流连接成一个新的流
+     *
+     */
+    @Test
+    public void flatMapStream() {
+        String [] strs1 = {"a","b","c"};
+        String [] strs2 = {"d","e","f"};
+        String [] strs3 = {"a","g","h"};
+        Stream<String[]> stream = Arrays.asList(strs1, strs2, strs3).stream();
+        // 返回值可以看出来flatMap和map的区别
+        Stream<String> stringStream = stream.flatMap((String[] x) -> Stream.of(x));
+        Stream<Stream<String>> streamStringStream = stream.map((String[] x) -> Stream.of(x));
+    }
 
     private List<Student> getStudentList() {
         List<Student> studentList = new ArrayList<>();
