@@ -144,6 +144,22 @@ public class StreamTest {
         Stream<Stream<String>> streamStringStream = stream.map((String[] x) -> Stream.of(x));
     }
 
+    /**
+     *
+     * 排序：sorted
+     *
+     */
+    @Test
+    public void sortStream() {
+        List<String> list = Arrays.asList("aaa", "ccc", "bbb");
+        list.stream().sorted().forEach((t) -> System.out.println(t));
+
+        // 自定义按照年龄排序
+        studentList.stream().sorted((s1, s2) -> Integer.valueOf(s1.getAge()).compareTo(Integer.valueOf(s2.getAge())))
+                .forEach(System.out::println);
+    }
+
+
     private List<Student> getStudentList() {
         List<Student> studentList = new ArrayList<>();
         studentList.add(new Student("张三", 16, "00001", "北京"));
