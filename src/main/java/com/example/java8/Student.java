@@ -16,12 +16,14 @@ public class Student {
     private int age;
     private String stuNum;
     private String address;
+    private Double score;
 
-    public Student(String name, int age, String stuNum, String address) {
+    public Student(String name, int age, String stuNum, String address, Double score) {
         this.name = name;
         this.age = age;
         this.stuNum = stuNum;
         this.address = address;
+        this.score = score;
     }
 
     public String getName() {
@@ -56,6 +58,14 @@ public class Student {
         this.address = address;
     }
 
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -63,6 +73,7 @@ public class Student {
                 ", age=" + age +
                 ", stuNum='" + stuNum + '\'' +
                 ", address='" + address + '\'' +
+                ", score=" + score +
                 '}';
     }
 
@@ -78,11 +89,12 @@ public class Student {
         return age == student.age &&
                 Objects.equals(name, student.name) &&
                 Objects.equals(stuNum, student.stuNum) &&
-                Objects.equals(address, student.address);
+                Objects.equals(address, student.address) &&
+                Objects.equals(score, student.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, age, stuNum, address);
+        return Objects.hash(name, age, stuNum, address, score);
     }
 }

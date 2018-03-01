@@ -3,10 +3,9 @@ package com.example.java8;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -159,19 +158,90 @@ public class StreamTest {
                 .forEach(System.out::println);
     }
 
+    /**
+     * 第三部：终止操作
+     *  allMatch---检查是否匹配所有元素
+     *  anyMatch----检查是否匹配任意元素
+     *  noneMatch---检查是否没有匹配所有元素
+     *  以上三种都返回boolean
+     *
+     *  findFirst--查找第一个元素
+     *  findAny--查找当前流中的任意元素
+     *  返回Optional
+     *
+     *  count 统计总数
+     *  max 最大值
+     *  min 最小值
+     * =====================================上面的都比较简单============
+     * reduce：聚合操作
+     * 返回单个的结果值，并且reduce操作每处理一个元素总是创建一个新的值.
+     */
+    @Test
+    public void optionalReduceStream() {
+        // 定义起始值
+        int startNum = 0;
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        // T reduce(T identity, BinaryOperator accumulator)
+        // 这里reduce 需要两个参数，其中第一个参数表示起始值，BinaryOperator是一个二元运算接口。
+        // 下面的意思就是初始值startNum累加集合中的元素. 0 + 1 + 2 + ...，实现一个累加的效果
+        Integer reduce = list.stream()
+                .reduce(startNum, (x, y) -> x + y);
+
+        // 另一个重载方法Optional<T> reduce(BinaryOperator<T> accumulator);
+        // 例如统计出studentList集合中的平均成绩
+        Optional<Double> optional = studentList.stream()
+                .map((x) -> x.getScore())
+                .reduce((s1, s2) -> s1 + s2);
+        double avergeScore = optional.get() / studentList.size();
+    }
+
+    /**
+     * 收集结果 collect
+     *
+     * 将流转换成其他形式，接收Collector接口实现，用于给Stream总汇总操作
+     */
+    @Test
+    public void collectStream() {
+        // 收集studentList集合中所有分数大于60的人数
+        Long collect = studentList.stream()
+                .filter((x) -> x.getScore() > 60)
+                .collect(Collectors.counting());
+        // Collectors.toSet
+        Set<String> collect1 = studentList.stream()
+                .map((x) -> x.getName())
+                .collect(Collectors.toSet());
+
+        // toCollection 转成需要的集合
+        Set<Student> hashSet = studentList.stream()
+                .collect(Collectors.toCollection(() -> new HashSet<>()));
+        
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     private List<Student> getStudentList() {
         List<Student> studentList = new ArrayList<>();
-        studentList.add(new Student("张三", 16, "00001", "北京"));
-        studentList.add(new Student("李四", 17, "00002", "上海"));
-        studentList.add(new Student("王五", 19, "00003", "大连"));
-        studentList.add(new Student("马六", 14, "00004", "深圳"));
-        studentList.add(new Student("胜七", 14, "00005", "广东"));
-        studentList.add(new Student("lilei", 19, "00015", "广东"));
-        studentList.add(new Student("ali", 29, "00017", "郑州"));
-        studentList.add(new Student("ten", 99, "00018", "朝阳"));
-        studentList.add(new Student("ten", 9, "00018", "朝阳"));
-        studentList.add(new Student("ten", 9, "00018", "朝阳"));
+        studentList.add(new Student("张三", 16, "00001", "北京", 87.5));
+        studentList.add(new Student("李四", 17, "00002", "上海", 91.0));
+        studentList.add(new Student("王五", 19, "00003", "大连", 88.5));
+        studentList.add(new Student("马六", 14, "00004", "深圳", 55.0));
+        studentList.add(new Student("胜七", 14, "00005", "广东", 81.5));
+        studentList.add(new Student("lilei", 19, "00015", "广东", 60.0));
+        studentList.add(new Student("ali", 29, "00017", "郑州", 77.5));
+        studentList.add(new Student("ten", 99, "00018", "朝阳", 68.0));
+        studentList.add(new Student("ten", 9, "00018", "朝阳", 100.0));
+        studentList.add(new Student("ten", 9, "00018", "朝阳", 100.0));
         return studentList;
     }
 
