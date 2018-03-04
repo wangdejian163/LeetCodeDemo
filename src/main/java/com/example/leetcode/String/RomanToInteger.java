@@ -48,4 +48,59 @@ public class RomanToInteger {
         return num;
     }
 
+    /**
+     * 罗马数字表示法，基本字符有7个：I，V，X，L，C，D，M，分别表示1，5，10，50，100，500，1000。
+     */
+    public int romanToInt2(String s) {
+        int sum = 0;
+        // 罗马数字对应阿拉伯数字是I = 1, V = 5;下面遍历时针对I、V相加为6.而IV=4.所以需要减2.
+        if (s.indexOf("IV") != -1) {
+            sum -= 2;
+        }
+        // 同理.I = 1, X = 10 I、X相加为11, IX=9. sum -= 2
+        if (s.indexOf("IX") != -1) {
+            sum -= 2;
+        }
+        // X = 10, L = 50 X、L相加为60. XL = 40.
+        if (s.indexOf("XL") != -1) {
+            sum -= 20;
+        }
+        // ...
+        if (s.indexOf("XC") != -1) {
+            sum -= 20;
+        }
+        if (s.indexOf("CD") != -1) {
+            sum -= 200;
+        }
+        if (s.indexOf("CM") != -1) {
+            sum -= 200L;
+        }
+
+        char[] c = s.toCharArray();
+        for (int i = 0; i < s.length(); i++) {
+            if (c[i] == 'I') {
+                sum += 1;
+            }
+            if (c[i] == 'V') {
+                sum += 5;
+            }
+            if (c[i] == 'X') {
+                sum += 10;
+            }
+            if (c[i] == 'L') {
+                sum += 50;
+            }
+            if (c[i] == 'C') {
+                sum += 100;
+            }
+            if (c[i] == 'D') {
+                sum += 500;
+            }
+            if (c[i] == 'M') {
+                sum += 1000;
+            }
+        }
+        return sum;
+    }
+
 }
