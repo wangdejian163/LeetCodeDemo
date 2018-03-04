@@ -1,6 +1,7 @@
 package com.example.java8;
 
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
@@ -21,7 +22,6 @@ public class StreamTest {
 
     /**
      * 第一步：获得stream流的几种方式.
-     *
      */
     @Test
     public void getStreamObj() {
@@ -56,6 +56,7 @@ public class StreamTest {
      * 筛选与切片filter:接收lambda，从流中筛选出符合条件的信息
      */
     List<Student> studentList = this.getStudentList();
+
     @Test
     public void optionStreamFilter() {
         /**
@@ -72,8 +73,7 @@ public class StreamTest {
     }
 
     /**
-     *limit:截取stream流
-     *
+     * limit:截取stream流
      */
     @Test
     public void optionStreamLimit() {
@@ -83,7 +83,6 @@ public class StreamTest {
 
     /**
      * skip（n）:跳过n个元素，若流中的元素不足n个,则返回一个空流.
-     *
      */
     @Test
     public void optionStreamSkip() {
@@ -94,7 +93,6 @@ public class StreamTest {
     }
 
     /**
-     *
      * distinct:去除掉原Stream中重复的元素，生成的新Stream中没有没有重复的元素.通过流生成元素的hashCode()和equals()方法才能达到去重元素.
      */
     @Test
@@ -111,9 +109,8 @@ public class StreamTest {
     }
 
     /**
-     *
      * 映射：map和flatMap
-     *
+     * <p>
      * map() --> 通过Function对元素执行一对一的转换。
      * map是对流对象中间的操作，通过给定的方法，将流中的每一个元素映射成一个新的元素。
      */
@@ -130,13 +127,12 @@ public class StreamTest {
 
     /**
      * flatMap和map类似，不同的是flatMap把流中的每个值转换成另外一个流，然后把所有的流连接成一个新的流
-     *
      */
     @Test
     public void flatMapStream() {
-        String [] strs1 = {"a","b","c"};
-        String [] strs2 = {"d","e","f"};
-        String [] strs3 = {"a","g","h"};
+        String[] strs1 = {"a", "b", "c"};
+        String[] strs2 = {"d", "e", "f"};
+        String[] strs3 = {"a", "g", "h"};
         Stream<String[]> stream = Arrays.asList(strs1, strs2, strs3).stream();
         // 返回值可以看出来flatMap和map的区别
         Stream<String> stringStream = stream.flatMap((String[] x) -> Stream.of(x));
@@ -144,9 +140,7 @@ public class StreamTest {
     }
 
     /**
-     *
      * 排序：sorted
-     *
      */
     @Test
     public void sortStream() {
@@ -160,18 +154,18 @@ public class StreamTest {
 
     /**
      * 第三部：终止操作
-     *  allMatch---检查是否匹配所有元素
-     *  anyMatch----检查是否匹配任意元素
-     *  noneMatch---检查是否没有匹配所有元素
-     *  以上三种都返回boolean
-     *
-     *  findFirst--查找第一个元素
-     *  findAny--查找当前流中的任意元素
-     *  返回Optional
-     *
-     *  count 统计总数
-     *  max 最大值
-     *  min 最小值
+     * allMatch---检查是否匹配所有元素
+     * anyMatch----检查是否匹配任意元素
+     * noneMatch---检查是否没有匹配所有元素
+     * 以上三种都返回boolean
+     * <p>
+     * findFirst--查找第一个元素
+     * findAny--查找当前流中的任意元素
+     * 返回Optional
+     * <p>
+     * count 统计总数
+     * max 最大值
+     * min 最小值
      * =====================================上面的都比较简单============
      * reduce：聚合操作
      * 返回单个的结果值，并且reduce操作每处理一个元素总是创建一个新的值.
@@ -197,7 +191,7 @@ public class StreamTest {
 
     /**
      * 收集结果 collect
-     *
+     * <p>
      * 将流转换成其他形式，接收Collector接口实现，用于给Stream总汇总操作
      */
     @Test
@@ -207,27 +201,73 @@ public class StreamTest {
                 .filter((x) -> x.getScore() > 60)
                 .collect(Collectors.counting());
         // Collectors.toSet
-        Set<String> collect1 = studentList.stream()
+        Set<String> set = studentList.stream()
                 .map((x) -> x.getName())
                 .collect(Collectors.toSet());
 
         // toCollection 转成需要的集合
         Set<Student> hashSet = studentList.stream()
                 .collect(Collectors.toCollection(() -> new HashSet<>()));
-        
+
+        // 计算平均值
+        Double collect2 = studentList.stream()
+                .collect(Collectors.averagingDouble((s) -> s.getScore()));
+
+        // 计算总成绩
+        Double sumScore = studentList.stream()
+                .collect(Collectors.summingDouble(Student::getScore));
+        Optional<Double> reduce = studentList.stream()
+                //.map((s) -> s.getScore())方法引用
+                .map(Student::getScore)
+                .reduce((s1, s2) -> s1 + s2);
+        Assert.assertEquals(reduce.get(), sumScore);
+
+        // 最大值 max和collect比较
+        Optional<Double> max = studentList.stream()
+                .map(Student::getScore)
+                .max((s1, s2) -> Double.compare(s1, s2));
+
+        Optional<Double> max1 = studentList.stream()
+                .map(Student::getScore)
+                .collect(Collectors.maxBy((s1, s2) -> Double.compare(s1, s2)));
+        Assert.assertEquals(max, max1);
+        // 同理还有最小值.
 
     }
 
+    /**
+     * 分组groupBy
+     */
+    @Test
+    public void groupByStream() {
+        // 按照指定条件条件分组
+        Map<String, List<Student>> map = studentList.stream()
+                .collect(Collectors.groupingBy((x) -> {
+                    if (x.getScore() >= 60.0 && x.getScore() < 90) {
+                        return "及格";
+                    } else if (x.getScore() >= 90) {
+                        return "优秀";
+                    } else {
+                        return "不及格";
+                    }
+                }));
+
+        // 多层分组
+        Map<Integer, Map<String, List<Student>>> map1 = studentList.stream()
+                .collect(Collectors.groupingBy((x) -> x.getAge(), Collectors.groupingBy((x) -> {
+                    if (x.getScore() > 90) {
+                        return "A";
+                    } else {
+                        return "B";
+                    }
+                })));
+
+        // 分区(符合条件在true分区，否则在false分区)
+        Map<Boolean, List<Student>> map2 = studentList.stream()
+                .collect(Collectors.partitioningBy((x) -> x.getScore() > 60));
 
 
-
-
-
-
-
-
-
-
+    }
 
 
     private List<Student> getStudentList() {
@@ -236,7 +276,7 @@ public class StreamTest {
         studentList.add(new Student("李四", 17, "00002", "上海", 91.0));
         studentList.add(new Student("王五", 19, "00003", "大连", 88.5));
         studentList.add(new Student("马六", 14, "00004", "深圳", 55.0));
-        studentList.add(new Student("胜七", 14, "00005", "广东", 81.5));
+        studentList.add(new Student("胜七", 14, "00005", "广东", 91.5));
         studentList.add(new Student("lilei", 19, "00015", "广东", 60.0));
         studentList.add(new Student("ali", 29, "00017", "郑州", 77.5));
         studentList.add(new Student("ten", 99, "00018", "朝阳", 68.0));
