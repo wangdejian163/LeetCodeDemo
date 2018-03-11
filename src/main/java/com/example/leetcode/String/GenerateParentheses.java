@@ -1,7 +1,6 @@
 package com.example.leetcode.String;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,7 +25,6 @@ public class GenerateParentheses {
      * ]
      */
 
-    // DFS递归算法.
 
     /**
      * 看网上的说明：Backtracking的思路是当前有若干选择，尝试每一种选择。如果已经发现某一种选择不符合条件(违反某些限定条件),
@@ -46,11 +44,11 @@ public class GenerateParentheses {
      */
     public List<String> generateParenthesis(int n) {
         List<String> list = new ArrayList<>();
-        dfs(list, "", n, n);
+        backtracking(list, "", n, n);
         return list;
     }
 
-    private void dfs(List<String> list, String s, int left, int right) {
+    private void backtracking(List<String> list, String s, int left, int right) {
 
         if (left > right) {
             return;
@@ -61,10 +59,10 @@ public class GenerateParentheses {
         }
 
         if (left > 0) {
-            dfs(list, s + '(', left - 1, right);
+            backtracking(list, s + '(', left - 1, right);
         }
         if (right > 0) {
-            dfs(list, s + ')', left, right - 1);
+            backtracking(list, s + ')', left, right - 1);
         }
     }
 
