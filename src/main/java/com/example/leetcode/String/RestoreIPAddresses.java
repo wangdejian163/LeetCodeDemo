@@ -78,7 +78,7 @@ public class RestoreIPAddresses {
         }
 
         // 每一段最长3位，最短一位,总共4段.
-        for (int i = 1; i < 4 && idx + i < ip.length(); i++) {
+        for (int i = 1; i < 4 && idx + i <= ip.length(); i++) {
             String s = ip.substring(idx, idx + i);
             if (s.length() > 3 || s.length() == 0 || Integer.parseInt(s) > 255 || (s.length() > 1 && s.charAt(0) == '0')) {
                 continue;
@@ -86,6 +86,5 @@ public class RestoreIPAddresses {
             restoreIp(ip, solutions, idx + i, restored + s + (count == 3 ? "" : "."), count + 1);
         }
     }
-
 
 }
