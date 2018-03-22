@@ -47,4 +47,28 @@ public class ValidPalindrome {
 
         return true;
     }
+
+    public boolean isPalindrome2(String s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
+            // 如果不是字母或数字说明就是特殊字符，直接跳过.
+            while (i < s.length() && !isValid(s.charAt(i))) {
+                i++;
+            }
+            while (j >= 0 && !isValid(s.charAt(j))) {
+                j--;
+            }
+            if (i < j && Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(s.charAt(j))) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    private boolean isValid(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z');
+    }
 }
