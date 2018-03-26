@@ -31,7 +31,7 @@ public class ReverseVowelsOfString {
         int left = 0;
         int right = s.length() - 1;
         StringBuilder sb = new StringBuilder(s.length());
-        while (left < s.length() && right >= 0) {
+        while (left < s.length() || right >= 0) {
             // 移动左指针,指导元音字母时停止
             while (left < s.length() && !isVowel(chars[left])) {
                 sb.append(chars[left++]);
