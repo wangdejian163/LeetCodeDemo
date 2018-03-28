@@ -57,4 +57,37 @@ public class ReverseVowelsOfString {
     }
 
 
+    public static String reverseVowels2(String s) {
+        int l = 0;
+        int r = s.length() - 1;
+        char[] value = s.toCharArray();
+        while (l < r) {
+            while (!isVowels2(value[l]) && l < r) {
+                l++;
+            }
+            while (!isVowels2(value[r]) && l < r) {
+                r--;
+            }
+            if (l < r) {
+                char temp = value[l];
+                value[l] = value[r];
+                value[r] = temp;
+                l++;
+                r--;
+            }
+        }
+        return new String(value);
+    }
+
+
+    public static boolean isVowels2(char c) {
+        char[] vowels = new char[]{'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+        for (int i = 0; i < vowels.length; i++) {
+            if (c == vowels[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
