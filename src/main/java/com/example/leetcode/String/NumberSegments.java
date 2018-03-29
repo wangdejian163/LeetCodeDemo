@@ -18,7 +18,7 @@ public class NumberSegments {
      * <p>
      * 输入: "Hello, my name is John"
      * 输出: 5
-     *
+     * <p>
      * 输入: "Hello, this is jim"
      * 输出: 4
      */
@@ -27,7 +27,6 @@ public class NumberSegments {
             return 0;
         }
         int count = 0;
-        int length = s.length();
 
         for (int i = 1; i < s.length(); i++) {
             if (s.charAt(i) == ' ' && s.charAt(i - 1) != ' ') {
@@ -38,6 +37,22 @@ public class NumberSegments {
             count++;
         }
         return count;
+    }
+
+    public int countSegments2(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        String[] splitSpace = s.split(" ");
+        int length = splitSpace.length;
+
+        for (int i = 0; i < splitSpace.length; i++) {
+            if (splitSpace[i] == null || splitSpace[i].length() == 0) {
+                length--;
+            }
+        }
+        return length;
     }
 
 }
