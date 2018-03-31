@@ -72,11 +72,10 @@ public class StringCompression {
             }
             chars[indexAns++] = currentChar;
             if (count != 1) {
+                for (char c : Integer.toString(count).toCharArray()) {
 
-            }
-            for (char c : Integer.toString(count).toCharArray()) {
-
-                chars[indexAns++] = c;
+                    chars[indexAns++] = c;
+                }
             }
         }
         return indexAns;
