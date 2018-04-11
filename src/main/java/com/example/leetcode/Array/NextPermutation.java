@@ -1,5 +1,7 @@
 package com.example.leetcode.Array;
 
+import java.util.Arrays;
+
 /**
  * <p>
  * 31.下一个排列
@@ -37,47 +39,98 @@ public class NextPermutation {
      * 3、递增数列逆序151246
      * 得146521的下一个排列为151246.
      *
-     * @param nums
+     * @param num
      */
     public void nextPermutation(int[] num) {
-        int n=num.length;
-        if(n<2)
+        int n = num.length;
+        if (n < 2) {
             return;
-        int index=n-1;
-        while(index>0){
-            if(num[index-1]<num[index])
+        }
+        int index = n - 1;
+        while (index > 0) {
+            if (num[index - 1] < num[index]) {
                 break;
+            }
             index--;
         }
-        if(index==0){
-            reverseSort(num,0,n-1);
+        if (index == 0) {
+            reverseSort(num, 0, n - 1);
             return;
-        }
-        else{
-            int val=num[index-1];
-            int j=n-1;
-            while(j>=index){
-                if(num[j]>val)
+        } else {
+            int val = num[index - 1];
+            int j = n - 1;
+            while (j >= index) {
+                if (num[j] > val) {
                     break;
+                }
                 j--;
             }
-            swap(num,j,index-1);
-            reverseSort(num,index,n-1);
+            swap(num, j, index - 1);
+            reverseSort(num, index, n - 1);
             return;
         }
     }
 
-    public void swap(int[] num, int i, int j){
-        int temp=0;
-        temp=num[i];
-        num[i]=num[j];
-        num[j]=temp;
+    public void swap(int[] num, int i, int j) {
+        int temp = 0;
+        temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
     }
 
-    public void reverseSort(int[] num, int start, int end){
-        if(start>end)
+    public void reverseSort(int[] num, int start, int end) {
+        if (start > end) {
             return;
-        for(int i=start;i<=(end+start)/2;i++)
-            swap(num,i,start+end-i);
+        }
+        for (int i = start; i <= (end + start) / 2; i++) {
+            swap(num, i, start + end - i);
+        }
     }
+
+
+    /**
+     *
+     * 修改
+     *
+     * @param nums
+     */
+    public void nextPermutations(int[] nums) {
+
+
+        int index = nums.length - 1;
+        if (nums.length < 2) {
+            return;
+        }
+        while (index > 0) {
+            if (nums[index - 1] < nums[index]) {
+                break;
+            }
+            index--;
+        }
+
+        if (index == 0) {
+            Arrays.sort(nums, 0, nums.length);
+        } else {
+            // 当前值
+            int val = nums[index - 1];
+            // 右后往前和当前值比较，如果当前值大于后面的某一值，交换位置
+            int n = nums.length - 1;
+            // 当前值只能和后面的所有索引比较
+            while (n >= index) {
+                if (nums[n] > val) {
+                    break;
+                }
+                n--;
+            }
+            // 替换位置
+            int temp = 0;
+            temp = nums[n];
+            nums[n] = nums[index - 1];
+            nums[index - 1] = temp;
+            // 当前索引+1，开始排序
+            Arrays.sort(nums, index, nums.length);
+        }
+    }
+
+
 }
