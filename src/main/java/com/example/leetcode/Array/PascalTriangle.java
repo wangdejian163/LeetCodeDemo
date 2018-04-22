@@ -1,6 +1,7 @@
 package com.example.leetcode.Array;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,5 +44,21 @@ public class PascalTriangle {
         }
 
         return triangle;
+    }
+
+    /**
+     * 杨辉三角二：
+     * 给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+     *
+     * @param rowIndex
+     * @return
+     */
+    public List<Integer> getRow(int rowIndex) {
+        Integer[] rowList = new Integer[rowIndex+1];
+        rowList[0] = 1;
+        for(int i=1; i<rowList.length;i++) {
+            rowList[i] = (int)((long)rowList[i-1]*(rowIndex-(i-1))/(i));
+        }
+        return Arrays.asList(rowList);
     }
 }
